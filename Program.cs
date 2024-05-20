@@ -174,8 +174,14 @@ string bin_file = $"{dir}\\bin.sql";
 string[] texts = { bin_text, receipt_text, terminal_text, transaction_text };
 string[] files = { bin_file, receipt_file, terminal_file, transaction_file };
 
-// by arrays
+var text_file = new Dictionary<string, string>();
 for (int i = 0; i < texts.Length; i++)
 {
-    File.WriteAllText(files[i],texts[i]);
+    text_file.Add(files[i], texts[i]);
+}
+
+// by dictionary
+foreach (var elem in text_file)
+{
+    File.WriteAllText(elem.Key, elem.Value);
 }
