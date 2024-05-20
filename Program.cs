@@ -37,18 +37,13 @@ string transaction_text = "BEGIN TRY\r\n       " +
 
 
 string transaction_file = $"{dir}\\transaction.sql";
-File.WriteAllText(transaction_file, transaction_text);
-
 
 // create file receipt.sql
-
 string receipt_text = $"select * from service_templates " +
     $"\r\nwhere service_name = '{service}'\r\n;\r\n\r\ninsert into service_templates\r\n" +
     $"(service_name,portal_name,template_id)\r\nvalues\r\n('{service}','hb3halyk',21)\r\n;";
 
 string receipt_file = $"{dir}\\receipt.sql";
-File.WriteAllText(receipt_file, receipt_text);
-
 
 // create file terminal.sql
 string terminal_text =
@@ -112,8 +107,6 @@ string terminal_text =
     "order by p.name, sp.Name\r\n;";
 
 string terminal_file = $"{dir}\\terminal.sql";
-File.WriteAllText(terminal_file, terminal_text);
-
 
 // create file bin.sql
 string bin_text =                                                           //81 
@@ -176,5 +169,13 @@ string bin_text =                                                           //81
     $"values\r\n(,'{bin}',0),\r\n(,'{bin}',0)\r\n;\r\n\r\n\r\n";
 
 string bin_file = $"{dir}\\bin.sql";
-File.WriteAllText(bin_file, bin_text);
 
+
+string[] texts = { bin_text, receipt_text, terminal_text, transaction_text };
+string[] files = { bin_file, receipt_file, terminal_file, transaction_file };
+
+// by arrays
+for (int i = 0; i < texts.Length; i++)
+{
+    File.WriteAllText(files[i],texts[i]);
+}
