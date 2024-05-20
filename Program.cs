@@ -1,5 +1,8 @@
 ﻿// create folder
 //string service = "MonaTechKz";
+using static System.Net.Mime.MediaTypeNames;
+using System.IO;
+
 Console.WriteLine("Service:");
 string service = Console.ReadLine();
 Console.WriteLine("terminalNon3DId:");
@@ -180,8 +183,12 @@ for (int i = 0; i < texts.Length; i++)
     text_file.Add(files[i], texts[i]);
 }
 
-// by dictionary
+// by dictionary 
 foreach (var elem in text_file)
 {
-    File.WriteAllText(elem.Key, elem.Value);
+    // by stream
+    using (StreamWriter writer = new StreamWriter(elem.Key, false))
+    {
+        await writer.WriteLineAsync(elem.Value);
+    }
 }
