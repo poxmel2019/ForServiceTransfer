@@ -34,9 +34,10 @@ string transaction_text = "BEGIN TRY\r\n       " +
     "ERROR_LINE() AS ErrorLine,\r\n        " +
     "ERROR_MESSAGE() AS ErrorMessage\r\n        " +
     "END CATCH\r\n;";
-//Console.WriteLine(transaction_text);
+
+
 string transaction_file = $"{dir}\\transaction.sql";
-//File.WriteAllText(transaction_file, transaction_text);
+File.WriteAllText(transaction_file, transaction_text);
 
 
 // create file receipt.sql
@@ -44,13 +45,12 @@ string transaction_file = $"{dir}\\transaction.sql";
 string receipt_text = $"select * from service_templates " +
     $"\r\nwhere service_name = '{service}'\r\n;\r\n\r\ninsert into service_templates\r\n" +
     $"(service_name,portal_name,template_id)\r\nvalues\r\n('{service}','hb3halyk',21)\r\n;";
-//Console.WriteLine(receipt_text);
+
 string receipt_file = $"{dir}\\receipt.sql";
-//File.WriteAllText(receipt_file, receipt_text);
+File.WriteAllText(receipt_file, receipt_text);
 
 
 // create file terminal.sql
-
 string terminal_text =
     "-- Services\r\n" +
     "select * \r\n" +
@@ -111,9 +111,8 @@ string terminal_text =
     "and sp.name = 'terminalNon3DId'\r\n--\r\n" +
     "order by p.name, sp.Name\r\n;";
 
-//Console.WriteLine(terminal_text);
 string terminal_file = $"{dir}\\terminal.sql";
-//File.WriteAllText(terminal_file, terminal_text);
+File.WriteAllText(terminal_file, terminal_text);
 
 
 // create file bin.sql
@@ -176,29 +175,6 @@ string bin_text =                                                           //81
     "(PortalServicePropertyId,Value,IsVisible)\r\n" +
     $"values\r\n(,'{bin}',0),\r\n(,'{bin}',0)\r\n;\r\n\r\n\r\n";
 
-//Console.WriteLine(bin_text);
 string bin_file = $"{dir}\\bin.sql";
-//File.WriteAllText(bin_file, bin_text);
+File.WriteAllText(bin_file, bin_text);
 
-string[] texts = { bin_text, receipt_text, terminal_text, transaction_text };
-string[] files = { bin_file, receipt_file, terminal_file, transaction_file };
-
-// by arrays
-/*
-for (int i = 0; i < texts.Length; i++)
-{
-    File.WriteAllText(files[i],texts[i]);
-}
-*/
-
-var text_file = new Dictionary<string, string>();
-for (int i = 0; i < texts.Length; i++)
-{
-    text_file.Add(files[i], texts[i]);
-}
-
-// by dictionary
-foreach (var elem in text_file)
-{
-    File.WriteAllText(elem.Key, elem.Value);
-}
