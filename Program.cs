@@ -1,10 +1,21 @@
 ﻿// create folder
-//string service = "MonaTechKz";
-using static System.Net.Mime.MediaTypeNames;
-using System.IO;
 
+string service;
 Console.WriteLine("Service:");
-string service = Console.ReadLine();
+while (true)
+{
+    service = Console.ReadLine();
+
+    if (string.IsNullOrEmpty(service))
+    {
+        Console.WriteLine("Empty service!");
+    }
+    else
+    {
+        break;
+    }
+}
+
 Console.WriteLine("terminalNon3DId:");
 string terminalNon3DId = Console.ReadLine();
 Console.WriteLine("bin");
@@ -107,7 +118,12 @@ string terminal_text =
     "on psp.ServicePropertyId = sp.Id\r\n" +
     $"where s.name = '{service}'\r\n" +
     "and sp.name = 'terminalNon3DId'\r\n--\r\n" +
-    "order by p.name, sp.Name\r\n;";
+    "order by p.name, sp.Name\r\n;" +
+    "\r\n\r\n" +
+    "/*" +
+    "\r\n" +
+    "*/"
+    ;
 
 string terminal_file = $"{dir}\\terminal.sql";
 
@@ -169,7 +185,8 @@ string bin_text =                                                           //81
     "-- action\r\n" +
     "insert into PortalServiceStaticPropertyValues\r\n" +
     "(PortalServicePropertyId,Value,IsVisible)\r\n" +
-    $"values\r\n(,'{bin}',0),\r\n(,'{bin}',0)\r\n;\r\n\r\n\r\n";
+    $"values\r\n(,'{bin}',0),\r\n(,'{bin}',0)\r\n;\r\n\r\n\r\n"
+    ;
 
 string bin_file = $"{dir}\\bin.sql";
 
