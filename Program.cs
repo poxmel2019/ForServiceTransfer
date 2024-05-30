@@ -106,7 +106,7 @@ string terminal_text =
     "select \r\ns.name serv, p.name portal, \r\nsp.name servprop, " +
     "sp.ServicePropertyTypeId,\r\npsp.PortalServicePropertyTypeId, \r\n" +
     "psspv.*\r\n" +
-    $"-- update psspv set value = '{terminalNon3DId}' --'10f00b32-4751-4e00-883d-0d49d3dc5220'\r\n" +
+    $"-- update psspv set value = '{terminalNon3DId}'\r\n" +
     "from PortalServiceStaticPropertyValues psspv\r\n" +
     "join PortalServiceProperties psp\r\n" +
     "on psspv.PortalServicePropertyId = psp.Id\r\n" +
@@ -117,11 +117,12 @@ string terminal_text =
     "join ServiceProperties sp\r\n" +
     "on psp.ServicePropertyId = sp.Id\r\n" +
     $"where s.name = '{service}'\r\n" +
-    "and sp.name = 'terminalNon3DId'\r\n--\r\n" +
+    "and sp.name = 'terminalNon3DId'\r\n" +
+    "-- '10f00b32-4751-4e00-883d-0d49d3dc5220'\r\n" +
     "order by p.name, sp.Name\r\n;" +
     "\r\n\r\n" +
     "/*" +
-    "\r\n" +
+    "\r\n\r\n" +
     "*/"
     ;
 
