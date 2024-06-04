@@ -186,7 +186,65 @@ string bin_text =                                                           //81
     "-- action\r\n" +
     "insert into PortalServiceStaticPropertyValues\r\n" +
     "(PortalServicePropertyId,Value,IsVisible)\r\n" +
-    $"values\r\n(,'{bin}',0),\r\n(,'{bin}',0)\r\n;\r\n\r\n\r\n"
+    $"values\r\n(,'{bin}',0),\r\n(,'{bin}',0)\r\n;\r\n\r\n\r\n" +           //81
+
+    "-- for prod\r\n" +
+    "-- a\r\n" +
+    "SELECT\r\n'INSERT INTO [dbo].[PortalServiceProperties]\r\n([Id]," +
+    "\r\n[PortalServiceId],\r\n[ServicePropertyId]," +
+    "\r\n[PortalServicePropertyTypeId],\r\n [ShowInDetails]," +
+    "\r\n[HistoryPropertyId],\r\n[HoldUnmaskedValueForOutput]," +
+    "\r\n[RegexPatternOnSaveToProcessProperties]," +
+    "\r\n[RegexReplacementValueOnSaveToProcessProperties]," +
+    "\r\n[ValueCanBeUpdatedInProcessProperties])'+\r\n'VALUES" +
+    "('+CONVERT(VARCHAR(256),psp.Id)+',\r\n'" +
+    "+CONVERT(VARCHAR(256),psp.PortalServiceId)+'," +
+    "\r\n'+CONVERT(VARCHAR(256),psp.ServicePropertyId)+'," +
+    "\r\n'+CONVERT(VARCHAR(256),psp.PortalServicePropertyTypeId)+',\r\n" +
+    "'+CONVERT(VARCHAR(256),psp.ShowInDetails)+',\r\n'" +
+    "+ISNULL(CONVERT(VARCHAR(256),psp.HistoryPropertyId),'null')+',\r\n'" +
+    "+CONVERT(VARCHAR(256),psp.HoldUnmaskedValueForOutput)+',\r\n'" +
+    "+ISNULL('N'''+psp.RegexPatternOnSaveToProcessProperties+'''','null')" +
+    "+',\r\n'" +
+    "+ISNULL('N'''+" +
+    "psp.RegexReplacementValueOnSaveToProcessProperties+'''','null')" +
+    "+ ',\r\n'" +
+    "+CONVERT(VARCHAR(256),psp.ValueCanBeUpdatedInProcessProperties)+')'" +
+    "\r\n FROM [dbo].[PortalServiceProperties] psp\r\n " +
+    "JOIN PortalServices ps " +
+    "ON ps.Id = psp.PortalServiceId\r\n " +
+    "JOIN ServiceProperties sp " +
+    "ON psp.ServicePropertyId = sp.id\r\n " +
+    "JOIN Portals p on p.Id = ps.PortalId\r\n" +
+    "WHERE ps.ServiceId =" +
+    "(SELECT Id FROM [Services] s (NOLOCK) " +
+    "WHERE s.Name='horgos')\r\n" +
+    "and sp.name = 'bin'\r\n" +
+    "order by p.Name\r\n;\r\n\r\n" +
+
+    "-- b\r\n" +
+    "SELECT\r\n" +
+    "'INSERT INTO [dbo].[PortalServiceStaticPropertyValues]\r\n" +
+    "([Id],\r\n[PortalServicePropertyId]," +
+    "\r\n[Value],\r\n[IsVisible]\r\n)' " +
+    "+\r\n'VALUES\r\n('+CONVERT(varchar(256),psspv.Id)+',\r\n'" +
+    "+CONVERT(varchar(256),psspv.PortalServicePropertyId)+',\r\n'''" +
+    "+CONVERT(varchar(256),psspv.Value)+''',\r\n'" +
+    "+CONVERT(varchar(256),psspv.IsVisible)+');'" +
+    "\r\nFROM PortalServiceStaticPropertyValues psspv\r\n" +
+    "JOIN PortalServiceProperties psp (NOLOCK) " +
+    "ON psp.Id = psspv.PortalServicePropertyId\r\n" +
+    "JOIN ServiceProperties sp (NOLOCK)" +
+    "ON sp.Id = psp.ServicePropertyId\r\n" +
+    "JOIN PortalServices ps (NOLOCK) " +
+    "ON ps.Id = psp.PortalServiceId\r\n" +
+    "JOIN [Services] s (NOLOCK) " +
+    "ON s.Id = ps.ServiceId\r\n" +
+    "JOIN Portals p (NOLOCK) " +
+    "ON p.Id = ps.PortalId\r\n" +
+    "WHERE ps.ServiceId =(SELECT Id FROM [Services] s (NOLOCK) " +
+    "WHERE s.Name='horgos')\r\nAND sp.name = 'bin'\r\n" +
+    "order by psp.Id\r\n;\r\n"
     ;
 
 string bin_file = $"{dir}\\bin.sql";
